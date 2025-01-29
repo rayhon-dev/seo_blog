@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Astrum Market{% endblock %}
+
+{% block content %}
+    <div class="content-container">
+        <h1 class="page-title">Welcome to Astrum Market</h1>
+        <p class="intro-text">Discover our latest products and amazing deals!</p>
+
+            <div class="product-grid stagger-animation">
+                {% for product in products %}
+                    <a href="{{ product.get_detail_url }}" class="product-card animate-scale-up">
+                        <div class="product-image">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">{{  product.name }}</h3>
+                            <p class="product-price">${{ product.price }}</p>
+                            <span class="view-details">View Details</span>
+                        </div>
+                    </a>
+                {% empty %}
+                    <h3>No products yet</h3>
+                {% endfor %}
+            </div>
+
+        <div class="cta-section">
+            <h2>Explore More</h2>
+            <a href="{% if category.slug %}{% url 'products:category' category.slug %}{% endif %}" class="cta-button">View All Products</a>
+        </div>
+    </div>
+{% endblock %}
+

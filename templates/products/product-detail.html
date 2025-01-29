@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    <div class="content-container animate-fade-in">
+        <div class="product-detail">
+            <div class="product-image-container">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+            </div>
+            <div class="product-info">
+                <h1 class="product-title">{{ product.name }}</h1>
+                <p class="product-price">${{ product.price }}</p>
+                <div class="product-meta">
+                    <p><strong>Brand:</strong> {{ product.brand.name }}</p>
+                    <p><strong>Color:</strong>
+                    {% for color in product.colors.all %}
+                        {{ color.name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                    </p>
+                </div>
+                <p class="product-description">
+                    {{ product.desc }}
+                </p>
+            </div>
+        </div>
+
+        <div class="reviews-section animate-slide-up">
+            <h2 class="section-title">Reviews</h2>
+                <div class="reviews-container">
+                    {% for review in reviews %}
+                        <div class="review">
+                            <div class="review-header">
+                                <h3 class="reviewer-name">{{ review.name }}</h3>
+                                <div class="review-rating">
+                                    {% for i in review.full_stars %}
+                                        <span class="star">★</span>
+                                    {% endfor %}
+                                    {% for i in review.empty_stars %}
+                                        <span class="star empty">★</span>
+                                    {% endfor %}
+                                </div>
+                                <h3 class="reviewer-name">{{ review.email }}</h3>
+                            </div>
+                            <p class="review-content">{{ review.content }}</p>
+                        </div>
+                    {% empty %}
+                        <h3>No rewiews yet</h3>
+                    {% endfor %}
+                </div>
+        </div>
+
+        <div class="add-review-section animate-slide-up">
+            <h2 class="section-title">Add a Review</h2>
+            <form id="review-form" class="review-form" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="name" class="form-label">Name:</label>
+                    <input type="text" id="name" name="name" required class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" id="email" name="email" required class="form-input">
+                </div>
+               <div class="form-group">
+                <label for="rating" class="form-label" id="rating" >Rating:</label>
+                <div class="rating-stars">
+                    <input type="radio" id="star5" name="rating" value="5" required>
+                    <label for="star5">★</label>
+                    <input type="radio" id="star4" name="rating" value="4">
+                    <label for="star4">★</label>
+                    <input type="radio" id="star3" name="rating" value="3">
+                    <label for="star3">★</label>
+                    <input type="radio" id="star2" name="rating" value="2">
+                    <label for="star2">★</label>
+                    <input type="radio" id="star1" name="rating" value="1">
+                    <label for="star1">★</label>
+                </div>
+            </div>
+                <div class="form-group">
+                    <label for="content" class="form-label">Review:</label>
+                    <textarea id="content" name="content" required class="form-input"></textarea>
+                </div>
+                <button type="submit" class="submit-button">Submit Review</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
