@@ -95,19 +95,25 @@ def product_by_category(request):
     brands = Brand.objects.all()
     colors = Color.objects.all()
     category_id = request.GET.get('category')
-    brand_id = request.GET.get('brand')
-    color_id = request.GET.get('color')
+    brands_id = request.GET.getlist('brand')
+    colors_id = request.GET.getlist('color')
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
+    selected_brands = None
+    selected_colors = None
 
     if category_id:
         products = products.filter(category_id__in=category_id)
 
-    if brand_id:
-        products = products.filter(brand__id__in=brand_id)
+    if brands_id:
+        products = products.filter(brand__id__in=brands_id)
+        selected_brands = brands.filter(id__in=brands_id)
+        brands = brands.exclude(id__in=brands_id)
 
-    if color_id:
-        products = products.filter(colors__id__in=color_id)
+    if colors_id:
+        products = products.filter(colors__id__in=colors_id)
+        selected_colors = colors.filter(id__in=colors_id)
+        colors = colors.exclude(id__in=colors_id)
 
 
 
@@ -125,6 +131,8 @@ def product_by_category(request):
         'colors': colors,
         'min_price': min_price,
         'max_price': max_price,
+        'selected_brands': selected_brands,
+        'selected_colors': selected_colors
     }
 
     return render(request, 'products/product-by-category.html', ctx)
